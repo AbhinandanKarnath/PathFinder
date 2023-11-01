@@ -10,14 +10,20 @@ import java.io.IOException;
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Main-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Main-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Hello!");
+        stage.setTitle("The path finder");
         stage.setScene(scene);
         stage.show();
     }
 
     public static void main(String[] args) {
-        launch();
+        try
+        {
+            launch();
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

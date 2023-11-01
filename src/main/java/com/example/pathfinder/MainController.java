@@ -1,38 +1,46 @@
 package com.example.pathfinder;
 
 import javafx.fxml.FXML;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-
-import java.util.EventListener;
 
 public class MainController {
     @FXML
     AnchorPane grid1;
+    @FXML
+    ChoiceBox<String> choiceBox;
+
+    private StackPane[][] sp;
+    private StackPane source;
+    private StackPane destin;
 
     @FXML
     void initialize()
     {
+        sp = new StackPane[18][21];
+        choiceBox.getItems().add(0,"Source");
+        choiceBox.getItems().add(1,"Destination");
+        choiceBox.getItems().add(2,"Block");
 
         for(int i = 0 ; i< 18 ; i++)
         {
             for( int j = 0 ; j < 21 ;j++)
             {
-                StackPane sp = new StackPane();
+                sp[i][j] = new StackPane();
 
-                sp.setPrefWidth(20);
-                sp.setPrefHeight(20);
+                BlockInfo cellInfo = new BlockInfo();
+                sp[i][j].setPrefWidth(20);
+                sp[i][j].setPrefHeight(20);
 
-                sp.setOnMouseEntered(mouseEvent -> sp.setStyle("-fx-background-color: white;"));
 //                sp.setOnMouseExited(mouseEvent -> onOver(sp));
-                sp.setOnMouseClicked(mouseEvent -> onClick(sp));
+                StackPane temp = sp[i][j];
+                sp[i][j].setOnMouseClicked(mouseEvent -> onClick( temp , cellInfo));
 
-                AnchorPane.setLeftAnchor(sp, j*23.0);
-                AnchorPane.setTopAnchor(sp, i*20.0);
-                sp.setStyle("-fx-background-color: lightgray;");
-                grid1.getChildren().add(sp);
+                AnchorPane.setLeftAnchor(sp[i][j], j*23.0);
+                AnchorPane.setTopAnchor(sp[i][j], i*20.0);
+                sp[i][j].setStyle("-fx-background-color: lightgray;");
+                grid1.getChildren().add(sp[i][j]);
             }
         }
 
@@ -45,8 +53,44 @@ public class MainController {
     }
 
     @FXML
-    public  void onClick(StackPane cell)
+    public  void onClick(StackPane cell , BlockInfo cellInfo)
     {
-        cell.setStyle("-fx-background-color: red");
+        String selected = choiceBox.getValue();
+
+        if(selected == null)
+        {
+            return;
+        }
+        switch (selected)
+        {
+            case "Source":
+                cellInfo.setSource();
+                if(source != null)
+                {
+                    source.setStyle("-fx-background-color: lightgray");
+                }
+                source = cell;
+                source.setStyle("-fx-background-color: red");
+                break;
+            case "Destination":
+                cellInfo.setDestination();
+                if(destin != null)
+                {
+                    destin.setStyle("-fx-background-color: lightgray");
+                }
+                destin = cell;
+                cell.setStyle("-fx-background-color: green");
+                break;
+            case "Block":
+                cellInfo.setCellBaricade();
+                cell.setStyle("-fx-background-color: black");
+                break;
+        }
+    }
+
+    @FXML
+    public void findPath()
+    {
+
     }
 }
