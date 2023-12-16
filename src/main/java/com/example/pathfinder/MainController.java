@@ -1,5 +1,7 @@
 package com.example.pathfinder;
 
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.AnchorPane;
@@ -11,35 +13,44 @@ public class MainController {
     @FXML
     ChoiceBox<String> choiceBox;
 
+    int row = 21;
+    int col = 21;
     private StackPane[][] sp;
+    private BlockInfo[][] cellInfo;
     private StackPane source;
     private StackPane destin;
+    int sourceX = -1;
+    int sourceY = -1;
+    int destinX = -1;
+    int destinY = -1;
 
     @FXML
     void initialize()
     {
-        sp = new StackPane[18][21];
+        sp = new StackPane[row][col];
+        cellInfo = new BlockInfo[row][col];
         choiceBox.getItems().add(0,"Source");
         choiceBox.getItems().add(1,"Destination");
         choiceBox.getItems().add(2,"Block");
 
-        for(int i = 0 ; i< 18 ; i++)
+        for(int i = 0 ; i< row ; i++)
         {
-            for( int j = 0 ; j < 21 ;j++)
+            for( int j = 0 ; j < col ;j++)
             {
                 sp[i][j] = new StackPane();
 
-                BlockInfo cellInfo = new BlockInfo();
+                cellInfo[i][j] = new BlockInfo( i , j );
                 sp[i][j].setPrefWidth(20);
                 sp[i][j].setPrefHeight(20);
 
 //                sp.setOnMouseExited(mouseEvent -> onOver(sp));
                 StackPane temp = sp[i][j];
-                sp[i][j].setOnMouseClicked(mouseEvent -> onClick( temp , cellInfo));
+                BlockInfo cell = cellInfo[i][j];
+                sp[i][j].setOnMouseClicked(mouseEvent -> onClick( temp , cell ));
 
                 AnchorPane.setLeftAnchor(sp[i][j], j*23.0);
                 AnchorPane.setTopAnchor(sp[i][j], i*20.0);
-                sp[i][j].setStyle("-fx-background-color: lightgray;");
+                sp[i][j].setStyle("-fx-background-color: orange;");
                 grid1.getChildren().add(sp[i][j]);
             }
         }
@@ -65,6 +76,8 @@ public class MainController {
         {
             case "Source":
                 cellInfo.setSource();
+                sourceX = cellInfo.getRow();
+                sourceY = cellInfo.getCol();
                 if(source != null)
                 {
                     source.setStyle("-fx-background-color: lightgray");
@@ -73,6 +86,8 @@ public class MainController {
                 source.setStyle("-fx-background-color: red");
                 break;
             case "Destination":
+                destinX = cellInfo.getRow();
+                destinY = cellInfo.getCol();
                 cellInfo.setDestination();
                 if(destin != null)
                 {
@@ -82,7 +97,7 @@ public class MainController {
                 cell.setStyle("-fx-background-color: green");
                 break;
             case "Block":
-                cellInfo.setCellBaricade();
+                cellInfo.setCellBlock();
                 cell.setStyle("-fx-background-color: black");
                 break;
         }
@@ -91,6 +106,24 @@ public class MainController {
     @FXML
     public void findPath()
     {
+        Task<Void> fin = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                Platform.runLater(() -> {
+                    for(int i = sourceY ; i< destinY ; i++)
+                    {
+                        sp[destinX][i].setStyle("-fx-background-color: blue");
+                    }
 
+                    for(int i = sourceX ; i< destinX ; i++)
+                    {
+                        sp[i][sourceY].setStyle("-fx-background-color: blue");
+                    }
+
+                });
+                return null;
+            }
+        };
+        new Thread(fin).start();
     }
 }
