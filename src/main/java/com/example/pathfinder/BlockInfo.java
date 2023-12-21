@@ -1,5 +1,9 @@
 package com.example.pathfinder;
 
+import javafx.geometry.Point2D;
+
+import java.util.Queue;
+
 public class BlockInfo {
 
     boolean path , block , destination , source , acq,vis;
@@ -29,8 +33,9 @@ public class BlockInfo {
 
     public void setCellBlock()
     {
-        path = false;
-        block = true;
+        this.path = false;
+        this.block = true;
+        this.acq = true;
     }
 
     public void setSource()
@@ -63,6 +68,8 @@ public class BlockInfo {
 
     public void setPath()
     {
-
+        this.path = true;
+        this.block = false;
+        this.acq = false;
     }
 }

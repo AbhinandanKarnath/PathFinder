@@ -8,7 +8,6 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -18,17 +17,14 @@ public class MainController {
     @FXML
     ChoiceBox<String> choiceBox;
 
-    int row = 21;
-    int col = 21;
+    int row = 25;
+    int col = 25;
     private StackPane[][] sp;
     private BlockInfo[][] cellInfo;
     private StackPane source;
     private StackPane destin;
-    int sourceX = -1;
-    int sourceY = -1;
-    int destinX = -1;
-    int destinY = -1;
 
+    private Queue<Point2D> visitedCell ;
     Point2D p1;
     Point2D p2;
 
@@ -37,9 +33,12 @@ public class MainController {
     {
         sp = new StackPane[row][col];
         cellInfo = new BlockInfo[row][col];
+        visitedCell = new LinkedList<>();
         choiceBox.getItems().add(0,"Source");
         choiceBox.getItems().add(1,"Destination");
         choiceBox.getItems().add(2,"Block");
+        choiceBox.getItems().add(3,"un-block");
+
 
         for(int i = 0 ; i< row ; i++)
         {
@@ -58,11 +57,10 @@ public class MainController {
 
                 AnchorPane.setLeftAnchor(sp[i][j], j*23.0);
                 AnchorPane.setTopAnchor(sp[i][j], i*20.0);
-                sp[i][j].setStyle("-fx-background-color: orange;");
+                sp[i][j].setStyle("-fx-background-color: #FF8000;");
                 grid1.getChildren().add(sp[i][j]);
             }
         }
-
     }
 
     @FXML
@@ -72,7 +70,7 @@ public class MainController {
     }
 
     @FXML
-    public  void onClick(StackPane cell , BlockInfo cellInfo)
+    public  void onClick(StackPane cell , BlockInfo cellIn)
     {
         String selected = choiceBox.getValue();
 
@@ -80,35 +78,53 @@ public class MainController {
         {
             return;
         }
+        int size = visitedCell.size();
+        int x , y;
         switch (selected)
         {
             case "Source":
-                cellInfo.setSource();
-                sourceX = cellInfo.getRow();
-                sourceY = cellInfo.getCol();
-                p1 = new Point2D(sourceX,sourceY);
+                cellIn.setSource();
+                p1 = new Point2D(cellIn.getRow(), cellIn.getCol());
                 if(source != null)
                 {
-                    source.setStyle("-fx-background-color: lightgray");
+                    for(int i = 0 ; i< size ; i++)
+                    {
+                        Point2D del = visitedCell.remove();
+                        x = (int) del.getX();
+                        y = (int) del.getY();
+                        cellInfo[x][y].setPath();
+                        sp[x][y].setStyle("-fx-background-color: #FF8000");
+                    }
+                    source.setStyle("-fx-background-color: #FF8000");
                 }
                 source = cell;
-                source.setStyle("-fx-background-color: red");
+                source.setStyle("-fx-background-color: #95190C");
                 break;
             case "Destination":
-                destinX = cellInfo.getRow();
-                destinY = cellInfo.getCol();
-                p2 = new Point2D(destinX,destinY);
-                cellInfo.setDestination();
+                p2 = new Point2D(cellIn.getRow(), cellIn.getCol());
+                cellIn.setDestination();
                 if(destin != null)
                 {
-                    destin.setStyle("-fx-background-color: lightgray");
+                    for(int i = 0 ; i< size ; i++)
+                    {
+                        Point2D del = visitedCell.remove();
+                        x = (int) del.getX();
+                        y = (int) del.getY();
+                        cellInfo[x][y].setPath();
+                        sp[x][y].setStyle("-fx-background-color: #FF8000");
+                    }
+                    destin.setStyle("-fx-background-color: #FF8000");
                 }
                 destin = cell;
-                cell.setStyle("-fx-background-color: green");
+                cell.setStyle("-fx-background-color: #0080FF");
                 break;
             case "Block":
-                cellInfo.setCellBlock();
-                cell.setStyle("-fx-background-color: black");
+                cellIn.setCellBlock();
+                cell.setStyle("-fx-background-color: #0F1A20");
+                break;
+            case "un-block":
+                cellIn.setPath();
+                cell.setStyle("-fx-background-color: #FF8000");
                 break;
         }
     }
@@ -116,16 +132,11 @@ public class MainController {
     @FXML
     public void findPath()
     {
-        System.out.println("Co - ordinates");
-        System.out.println(sourceX+" "+sourceY+" "+p1.getX()+" "+ p1.getY());
-        System.out.println(destinX+" "+destinY+" "+p2.getX()+" "+p2.getY());
-        sp[sourceX][sourceY].setStyle("-fx-background-color: white");
-
         Task<Void> fin = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
                 Queue<Point2D> queue = new LinkedList<>();
-                queue.add(new Point2D(sourceX, sourceY));
+                queue.add(p1);
 
                 while (!queue.isEmpty()) {
                     Point2D p = queue.remove();
@@ -134,27 +145,28 @@ public class MainController {
 
                     cellInfo[pr2][pc2].setVis();
                     Platform.runLater(() -> {
-                        sp[pr2][pc2].setStyle("-fx-background-color: blue");
+                        sp[pr2][pc2].setStyle("-fx-background-color: #FFBF00");
                         System.out.println(pr2 + " " + pc2);
                     });
+                    visitedCell.add(p);
 
                     if (p.equals(p2)) {
                         break;
                     }
 
-                    if (pr2 - 1 > 0 && !cellInfo[pr2 - 1][pc2].getAcq() && !cellInfo[pr2 - 1][pc2].getVis()) {
+                    if (pr2 - 1 > -1 && !cellInfo[pr2 - 1][pc2].getAcq()) {
                         queue.add(new Point2D(pr2 - 1, pc2));
                         cellInfo[pr2 - 1][pc2].setAcq();
                     }
-                    if (pc2 + 1 < col && !cellInfo[pr2][pc2 + 1].getAcq() && !cellInfo[pr2][pc2 + 1].getVis()) {
+                    if (pc2 + 1 < col && !cellInfo[pr2][pc2 + 1].getAcq()) {
                         queue.add(new Point2D(pr2, pc2 + 1));
                         cellInfo[pr2][pc2 + 1].setAcq();
                     }
-                    if (pr2 + 1 < row && !cellInfo[pr2 + 1][pc2].getAcq() && !cellInfo[pr2 + 1][pc2].getVis()) {
+                    if (pr2 + 1 < row && !cellInfo[pr2 + 1][pc2].getAcq()) {
                         queue.add(new Point2D(pr2 + 1, pc2));
                         cellInfo[pr2 + 1][pc2].setAcq();
                     }
-                    if (pc2 - 1 >= 0 && !cellInfo[pr2][pc2 - 1].getAcq() && !cellInfo[pr2][pc2 - 1].getVis()) {
+                    if (pc2 - 1 > -1 && !cellInfo[pr2][pc2 - 1].getAcq()) {
                         queue.add(new Point2D(pr2, pc2 - 1));
                         cellInfo[pr2][pc2 - 1].setAcq();
                     }
@@ -165,7 +177,8 @@ public class MainController {
                         e.printStackTrace();
                     }
                 }
-
+                sp[((int)p1.getX())][((int)p1.getY())].setStyle("-fx-background-color: #95190C");
+                sp[((int)p2.getX())][((int)p2.getY())].setStyle("-fx-background-color: green");
                 return null;
             }
         };
