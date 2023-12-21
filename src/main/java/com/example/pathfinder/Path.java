@@ -5,13 +5,10 @@ import java.util.Queue;
 
 public class Path {
 
-    Queue<Point2D> path;
-
     public Path(){
     }
-    public void findPath()
+    public void findPath(Point2D src , Point2D des)
     {
-
 
         return;
     }

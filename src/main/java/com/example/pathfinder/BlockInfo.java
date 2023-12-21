@@ -2,7 +2,7 @@ package com.example.pathfinder;
 
 public class BlockInfo {
 
-    boolean path , block , destination , source;
+    boolean path , block , destination , source , acq,vis;
     int row;
     int col;
 
@@ -14,6 +14,8 @@ public class BlockInfo {
         block = false;
         destination = false;
         source = false;
+        acq = false;
+        vis = false;
     }
     public int getCol()
     {
@@ -45,6 +47,18 @@ public class BlockInfo {
         path = false;
         source = false;
         block = false;
+    }
+    public void setAcq(){this.acq = true;}
+    public boolean getAcq(){return this.acq;}
+
+    public void setVis()
+    {
+        this.vis = true;
+    }
+
+    public boolean getVis()
+    {
+        return this.vis;
     }
 
     public void setPath()
