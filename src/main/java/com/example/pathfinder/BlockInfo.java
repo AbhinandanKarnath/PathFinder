@@ -9,6 +9,7 @@ public class BlockInfo {
     boolean path , block , destination , source , acq,vis;
     int row;
     int col;
+    int value;
 
     public BlockInfo(int row , int col)
     {
@@ -29,6 +30,14 @@ public class BlockInfo {
     public int getRow()
     {
         return  this.row;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
     }
 
     public void setCellBlock()

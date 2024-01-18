@@ -11,7 +11,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Main-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(),700,500);
+        Scene scene = new Scene(fxmlLoader.load(),770,565);
         stage.setTitle("The path finder");
         stage.setScene(scene);
         stage.show();
@@ -24,6 +24,7 @@ public class Main extends Application {
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
+            System.out.println(e.getCause());
         }
     }
 }
