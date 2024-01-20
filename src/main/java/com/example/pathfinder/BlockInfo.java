@@ -1,9 +1,5 @@
 package com.example.pathfinder;
 
-import javafx.geometry.Point2D;
-
-import java.util.Queue;
-
 public class BlockInfo {
 
     boolean path , block , destination , source , acq,vis;
@@ -65,9 +61,9 @@ public class BlockInfo {
     public void setAcq(){this.acq = true;}
     public boolean getAcq(){return this.acq;}
 
-    public void setVis()
+    public void setVis(boolean vis)
     {
-        this.vis = true;
+        this.vis = vis;
     }
 
     public boolean getVis()
@@ -79,6 +75,7 @@ public class BlockInfo {
     {
         this.path = true;
         this.block = false;
+//        this.vis = false;
         this.acq = false;
     }
 }

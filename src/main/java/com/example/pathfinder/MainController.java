@@ -100,64 +100,78 @@ public class MainController {
         }
         int size = visitedCell.size();
         int x , y;
-        switch (selected)
+
+        try
         {
-            case "Source":
-                cellIn.setSource();
-                p1 = new Point2D(cellIn.getRow(), cellIn.getCol());
-                if(source != null)
-                {
-                    for(int i = 0 ; i< size ; i++)
-                    {
-                        Point2D del = visitedCell.remove();
-                        x = (int) del.getX();
-                        y = (int) del.getY();
-                        cellInfo[x][y].setPath();
-                        sp[x][y].setStyle("-fx-background-color: "+background);                                                    //#FF8000
-                    }
-                    size = 0;
-                    count = 0 ;
-                    source.setStyle("-fx-background-color: "+background);                                            //#FF8000
-                    if(destin != null)
-                    {
-                        destin.setStyle("-fx-background-color: "+background);
-                    }
-                }
-                source = cell;
-                source.setStyle("-fx-background-color: "+sourceCol);                                                 //#95190C
-                break;
-            case "Destination":
-                p2 = new Point2D(cellIn.getRow(), cellIn.getCol());
-                cellIn.setDestination();
-                if(destin != null)
-                {
-                    for(int i = 0 ; i< size ; i++)
-                    {
-                        Point2D del = visitedCell.remove();
-                        x = (int) del.getX();
-                        y = (int) del.getY();
-                        cellInfo[x][y].setPath();
-                        sp[x][y].setStyle("-fx-background-color: "+background);                                      //#FF8000
-                    }
-                    size = 0;
-                    count = 0 ;
-                    destin.setStyle("-fx-background-color: "+background);                                            //#FF8000
+            switch (selected)
+            {
+                case "Source":
+                    cellIn.setSource();
+                    p1 = new Point2D(cellIn.getRow(), cellIn.getCol());
                     if(source != null)
                     {
-                        source.setStyle("-fx-background-color: "+background);
+                        for(int i = 0 ; i< size ; i++)
+                        {
+                            Point2D del = visitedCell.remove();
+                            x = (int) del.getX();
+                            y = (int) del.getY();
+                            cellInfo[x][y].setPath();
+                            cellInfo[x][y].setVis(false);
+                            sp[x][y].setStyle("-fx-background-color: "+background);                                                    //#FF8000
+                            Thread.sleep(5);
+                        }
+                        size = 0;
+                        count = 0 ;
+                        source.setStyle("-fx-background-color: "+background);                                            //#FF8000
+                        if(destin != null)
+                        {
+                            destin.setStyle("-fx-background-color: "+background);
+                        }
                     }
-                }
-                destin = cell;
-                cell.setStyle("-fx-background-color: "+destiCol);                                                    //#0080FF
-                break;
-            case "Block":
-                cellIn.setCellBlock();
-                cell.setStyle("-fx-background-color: #0080FF");
-                break;
-            case "un-block":
-                cellIn.setPath();
-                cell.setStyle("-fx-background-color: "+background);
-                break;
+                    source = cell;
+                    source.setStyle("-fx-background-color: "+sourceCol);                                                 //#95190C
+                    break;
+                case "Destination":
+                    p2 = new Point2D(cellIn.getRow(), cellIn.getCol());
+                    cellIn.setDestination();
+                    if(destin != null)
+                    {
+                        for(int i = 0 ; i< size ; i++)
+                        {
+                            Point2D del = visitedCell.remove();
+                            x = (int) del.getX();
+                            y = (int) del.getY();
+                            cellInfo[x][y].setPath();
+                            cellInfo[x][y].setVis(false);
+                            sp[x][y].setStyle("-fx-background-color: "+background);                                      //#FF8000
+                            Thread.sleep(5);
+                        }
+                        size = 0;
+                        count = 0 ;
+                        destin.setStyle("-fx-background-color: "+background);                                            //#FF8000
+                        if(source != null)
+                        {
+                            source.setStyle("-fx-background-color: "+background);
+                        }
+                    }
+                    destin = cell;
+                    cell.setStyle("-fx-background-color: "+destiCol);                                                    //#0080FF
+                    break;
+                case "Block":
+                    cellIn.setCellBlock();
+                    cellIn.setValue(-1);
+                    cell.setStyle("-fx-background-color: #0080FF");
+                    break;
+                case "un-block":
+                    cellIn.setPath();
+                    cellIn.setValue(0);
+                    cell.setStyle("-fx-background-color: "+background);
+                    break;
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -196,7 +210,7 @@ public class MainController {
                     int pr2 = (int) p.getX();
                     int pc2 = (int) p.getY();
 
-                    cellInfo[pr2][pc2].setVis();
+//                    cellInfo[pr2][pc2].setVis();
                     Platform.runLater(() -> {
                         sp[pr2][pc2].setStyle("-fx-background-color: #FFBF00");
 
@@ -207,11 +221,22 @@ public class MainController {
 
                     if (p.equals(p2)) {                                                             //if the source reaches destination
                         Queue<Point2D> path = new Path().findPath(cellInfo , p1 ,p2);
+                        Queue<Point2D> temp = new LinkedList<>();
 
-                        while(!path.isEmpty())                                                      //create the path
+                        try {
+                            while(!path.isEmpty())                                                      //create the path
+                            {
+                                Point2D cell = path.remove();
+                                sp[(int)cell.getX()][(int)cell.getY()].setStyle("-fx-background-color: white");
+                                temp.add(cell);
+                                Thread.sleep(100);
+                            }
+                        }
+                        catch (Exception e)
                         {
-                            Point2D cell = path.remove();
-                            sp[(int)cell.getX()][(int)cell.getY()].setStyle("-fx-background-color: white");
+                            System.out.println(e.getMessage());
+                            System.out.println(e.getCause());
+                            break;
                         }
 
                         while(!queue.isEmpty()) {
@@ -220,6 +245,30 @@ public class MainController {
                             int tempY = (int)reached.getY();
                             cellInfo[tempX][tempY].setPath();
                             cellInfo[tempX][tempY].setValue(0);
+                        }
+                        int x , y;
+
+                        while(!visitedCell.isEmpty())
+                        {
+
+                            Point2D del = visitedCell.remove();
+
+                            x = (int) del.getX();
+                            y = (int) del.getY();
+                            cellInfo[x][y].setPath();
+                            System.out.println(x+" "+" "+y+" "+cellInfo[x][y].getVis());
+                            if(!cellInfo[x][y].getVis())
+                            {
+                                sp[x][y].setStyle("-fx-background-color: "+background);                                 //#FF8000
+                                Thread.sleep(5);
+                            }
+                        }
+                        System.out.println(temp.size());
+                        visitedCell = temp;
+
+                        while(!path.isEmpty())
+                        {
+                            path.remove();
                         }
                         break;
                     }
@@ -257,19 +306,10 @@ public class MainController {
                 Thread.sleep(15);
                 sp[((int)p1.getX())][((int)p1.getY())].setStyle("-fx-background-color: #95190C");
 
-
+                System.out.println("Searched completed................!!!");
                 return null;
             }
         };
         new Thread(fin).start();
     }
 }
-
-/*
-*
-                *
-                sp[sourceX][sourceY-1].setStyle("-fx-background-color: white");
-                sp[sourceX+1][sourceY].setStyle("-fx-background-color: white");
-                sp[sourceX][sourceY+1].setStyle("-fx-background-color: white");
-                sp[sourceX-1][sourceY].setStyle("-fx-background-color: white");
-* */

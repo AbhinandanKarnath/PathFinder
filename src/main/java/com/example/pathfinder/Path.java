@@ -12,45 +12,56 @@ public class Path {
 
     public Queue<Point2D> findPath(BlockInfo[][] cellInfo , Point2D sou , Point2D des)
     {
-        int sx = (int) sou.getX();
-        int sy = (int) sou.getY();
-        int dx = (int) des.getX();
-        int dy = (int) des.getY();
-        int val = cellInfo[dx][dy].getValue() - 1 ;
 
         Queue<Point2D> path = new LinkedList<>();
 
-        while (sx != dx || sy != dy)
+        try
         {
-            if(val == cellInfo[dx-1][dy].getValue())
-            {
-                dx = dx -1;
-            }
-            else
-            if(val == cellInfo[dx][dy-1].getValue())
-            {
-                dy = dy-1;
-            }
-            else
-            if(val == cellInfo[dx+1][dy].getValue())
-            {
-                dx = dx+1;
-            }
-            else
-            if(val == cellInfo[dx][dy+1].getValue()) {
-                dy = dy + 1;
-            }
-            else
-            {
-                System.out.println(dx+" "+dy+" "+val);
-                break;
-            }
-            System.out.println(dx +" "+dy);
-            path.add(new Point2D(dx,dy));
-            val = val-1;
-        }
+            int sx = (int) sou.getX();
+            int sy = (int) sou.getY();
+            int dx = (int) des.getX();
+            int dy = (int) des.getY();
+            int val = cellInfo[dx][dy].getValue() - 1 ;
 
-        return path;
+            while (sx != dx || sy != dy)
+            {
+                if(val == cellInfo[dx-1][dy].getValue())
+                {
+                    dx = dx -1;
+                }
+                else
+                if(val == cellInfo[dx][dy-1].getValue())
+                {
+                    dy = dy-1;
+                }
+                else
+                if(val == cellInfo[dx+1][dy].getValue())
+                {
+                    dx = dx+1;
+                }
+                else
+                if(val == cellInfo[dx][dy+1].getValue()) {
+                    dy = dy + 1;
+                }
+                else
+                {
+                    System.out.println(dx+" "+dy+" "+val);
+                    break;
+                }
+                System.out.println(dx +" "+dy);
+                path.add(new Point2D(dx,dy));
+                cellInfo[dx][dy].setVis(true);
+                val = val-1;
+            }
+            System.out.println("sending back the array......");
+            return path;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println(e.getCause());
+            return path;
+        }
     }
 
     public Integer xAxisPath()
