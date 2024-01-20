@@ -32,5 +32,7 @@
       </Pane>
       <Label layoutX="6.0" layoutY="244.0" text="Animation speed" />
       <TextField fx:id="aniSpeed" layoutX="6.0" layoutY="272.0" onKeyReleased="#setAniSpeed" prefHeight="26.0" prefWidth="90.0" promptText="100" />
+      <Button layoutX="3.0" layoutY="335.0" mnemonicParsing="false" onAction="#createWall" text="create obsticles" />
+      <Button layoutX="23.0" layoutY="372.0" mnemonicParsing="false" onAction="#initialize" text="Refresh" />
    </children>
 </AnchorPane>

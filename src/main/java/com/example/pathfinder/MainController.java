@@ -13,6 +13,8 @@ import javafx.scene.layout.StackPane;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Random;
+import java.util.Stack;
 
 public class MainController {
 
@@ -36,24 +38,31 @@ public class MainController {
     private StackPane source;
     private StackPane destin;
 
+    private Stack<Point2D> blocks;
     private Queue<Point2D> visitedCell ;
 
     String sourceCol , destiCol = "white";
     String background = "rgb(20,20,20)";
     Point2D p1;
     Point2D p2;
+    boolean check = true;
 
     @FXML
     void initialize()
     {
         sp = new StackPane[row][col];
         cellInfo = new BlockInfo[row][col];
+        blocks = new Stack<>();
         visitedCell = new LinkedList<>();
-        choiceBox.getItems().add(0,"Source");
-        choiceBox.getItems().add(1,"Destination");
-        choiceBox.getItems().add(2,"Block");
-        choiceBox.getItems().add(3,"un-block");
 
+        if(check)
+        {
+            choiceBox.getItems().add(0,"Source");
+            choiceBox.getItems().add(1,"Destination");
+            choiceBox.getItems().add(2,"Block");
+            choiceBox.getItems().add(3,"un-block");
+            check = false;
+        }
 
         for(int i = 0 ; i< row ; i++)
         {
@@ -73,10 +82,7 @@ public class MainController {
 
                 AnchorPane.setLeftAnchor(sp[i][j], j*22.0);
                 AnchorPane.setTopAnchor(sp[i][j], i*22.0);
-                                                                                                                        /*                                                                                                                   
-                AnchorPane.setLeftAnchor(sp[i][j], j*23.0);
-                AnchorPane.setTopAnchor(sp[i][j], i*20.0);
-                                                                                                                        */
+
                 sp[i][j].setStyle("-fx-background-color: "+background);                                                           //#FF8000
                 grid1.getChildren().add(sp[i][j]);
             }
@@ -302,6 +308,8 @@ public class MainController {
                 }
                 System.out.println(p2.getX()+" <-> "+p2.getY());
                 Thread.sleep(15);
+                visitedCell.add(p2);
+                visitedCell.add(p1);
                 sp[((int)p2.getX())][((int)p2.getY())].setStyle("-fx-background-color: green");
                 Thread.sleep(15);
                 sp[((int)p1.getX())][((int)p1.getY())].setStyle("-fx-background-color: #95190C");
@@ -311,5 +319,38 @@ public class MainController {
             }
         };
         new Thread(fin).start();
+    }
+
+    @FXML
+    public void createWall()
+    {
+        Random random = new Random();
+
+        while(blocks.size()>0)
+        {
+
+            Point2D point2D = blocks.pop();
+            int tempX = (int)point2D.getX();
+            int tempY = (int)point2D.getY();
+
+            cellInfo[tempX][tempY].setPath();
+            cellInfo[tempX][tempY].setValue(0);
+            sp[tempX][tempY].setStyle("-fx-background-color: "+background);
+        }
+
+        for(int i =  0 ; i< 150 ; i++)
+        {
+
+            int x = random.nextInt(21);
+            int y = random.nextInt(21);
+
+            Point2D temp = new Point2D(x,y);
+            if(!visitedCell.contains(temp)) {
+                blocks.push(temp);
+                cellInfo[x][y].setCellBlock();
+                cellInfo[x][y].setValue(-1);
+                sp[x][y].setStyle("-fx-background-color: #0080FF");
+            }
+        }
     }
 }
