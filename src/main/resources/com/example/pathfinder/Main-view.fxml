@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="521.0" prefWidth="700.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pathfinder.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="521.0" prefWidth="700.0" style="-fx-background-color: maroon;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pathfinder.MainController">
    <children>
       <AnchorPane fx:id="grid1" layoutX="129.0" layoutY="21.0" prefHeight="146.0" prefWidth="202.0" style="-fx-background-color: white;" />
       <ChoiceBox fx:id="choiceBox" layoutX="14.0" layoutY="96.0" prefHeight="26.0" prefWidth="74.0" />
@@ -30,8 +30,11 @@
             </Label>
          </children>
       </Pane>
-      <Label layoutX="6.0" layoutY="244.0" text="Animation speed" />
-      <TextField fx:id="aniSpeed" layoutX="6.0" layoutY="272.0" onKeyReleased="#setAniSpeed" prefHeight="26.0" prefWidth="90.0" promptText="100" />
+      <Label layoutX="6.0" layoutY="244.0" text="Animation speed" textFill="#d4a010">
+         <font>
+            <Font size="14.0" />
+         </font></Label>
+      <TextField fx:id="aniSpeed" layoutX="6.0" layoutY="272.0" onKeyReleased="#setAniSpeed" prefHeight="26.0" prefWidth="90.0" promptText="50" />
       <Button layoutX="3.0" layoutY="335.0" mnemonicParsing="false" onAction="#createWall" text="create obsticles" />
       <Button layoutX="23.0" layoutY="372.0" mnemonicParsing="false" onAction="#initialize" text="Refresh" />
    </children>

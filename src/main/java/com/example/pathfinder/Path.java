@@ -25,22 +25,22 @@ public class Path {
 
             while (sx != dx || sy != dy)
             {
-                if(val == cellInfo[dx-1][dy].getValue())
+                if( dx-1 > -1 && val == cellInfo[dx-1][dy].getValue())
                 {
                     dx = dx -1;
                 }
                 else
-                if(val == cellInfo[dx][dy-1].getValue())
+                if( dy-1 > -1 && val == cellInfo[dx][dy-1].getValue())
                 {
                     dy = dy-1;
                 }
                 else
-                if(val == cellInfo[dx+1][dy].getValue())
+                if(dx+1 <=21 && val == cellInfo[dx+1][dy].getValue())
                 {
                     dx = dx+1;
                 }
                 else
-                if(val == cellInfo[dx][dy+1].getValue()) {
+                if(dy+1 <=21 && val == cellInfo[dx][dy+1].getValue()) {
                     dy = dy + 1;
                 }
                 else
@@ -48,7 +48,7 @@ public class Path {
                     System.out.println(dx+" "+dy+" "+val);
                     break;
                 }
-                System.out.println(dx +" "+dy);
+                System.out.println(dx +" "+dy+" "+val);
                 path.add(new Point2D(dx,dy));
                 cellInfo[dx][dy].setVis(true);
                 val = val-1;
@@ -58,6 +58,7 @@ public class Path {
         }
         catch (Exception e)
         {
+            System.out.println("Damn bro excpetion.............");
             System.out.println(e.getMessage());
             System.out.println(e.getCause());
             return path;

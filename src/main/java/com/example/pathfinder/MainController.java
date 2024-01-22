@@ -4,7 +4,6 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
-import javafx.geometry.Point3D;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -188,7 +187,7 @@ public class MainController {
         {
             if(aniSpeed.equals(""))
             {
-                animation = 100;
+                animation = 50;
             }
             else
             {
@@ -229,10 +228,12 @@ public class MainController {
                         Queue<Point2D> path = new Path().findPath(cellInfo , p1 ,p2);
                         Queue<Point2D> temp = new LinkedList<>();
 
+                        System.out.println("The path to source and destination is ");
                         try {
                             while(!path.isEmpty())                                                      //create the path
                             {
                                 Point2D cell = path.remove();
+                                System.out.println((int)cell.getX()+" "+(int)cell.getY());
                                 sp[(int)cell.getX()][(int)cell.getY()].setStyle("-fx-background-color: white");
                                 temp.add(cell);
                                 Thread.sleep(100);
@@ -262,7 +263,7 @@ public class MainController {
                             x = (int) del.getX();
                             y = (int) del.getY();
                             cellInfo[x][y].setPath();
-                            System.out.println(x+" "+" "+y+" "+cellInfo[x][y].getVis());
+
                             if(!cellInfo[x][y].getVis())
                             {
                                 sp[x][y].setStyle("-fx-background-color: "+background);                                 //#FF8000
@@ -338,7 +339,7 @@ public class MainController {
             sp[tempX][tempY].setStyle("-fx-background-color: "+background);
         }
 
-        for(int i =  0 ; i< 150 ; i++)
+        for(int i =  0 ; i< 200 ; i++)
         {
 
             int x = random.nextInt(21);
