@@ -8,34 +8,34 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="521.0" prefWidth="700.0" style="-fx-background-color: maroon;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pathfinder.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="627.0" prefWidth="781.0" style="-fx-background-color: #032b43;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pathfinder.MainController">
    <children>
-      <AnchorPane fx:id="grid1" layoutX="129.0" layoutY="21.0" prefHeight="146.0" prefWidth="202.0" style="-fx-background-color: white;" />
-      <ChoiceBox fx:id="choiceBox" layoutX="14.0" layoutY="96.0" prefHeight="26.0" prefWidth="74.0" />
-      <Button layoutX="7.0" layoutY="147.0" mnemonicParsing="false" onAction="#findPath" style="-fx-background-color: white; -fx-border-color: black;" text="search Path">
+      <AnchorPane fx:id="grid1" layoutX="150.0" layoutY="23.0" prefHeight="146.0" prefWidth="202.0" style="-fx-background-color: white;" />
+      <ChoiceBox fx:id="choiceBox" layoutX="19.0" layoutY="96.0" prefHeight="26.0" prefWidth="74.0" />
+      <Button layoutX="13.0" layoutY="143.0" mnemonicParsing="false" onAction="#findPath" prefHeight="24.0" prefWidth="86.0" style="-fx-background-color: transparent; -fx-border-color: black;" text="search Path" textFill="#ffb713">
          <font>
-            <Font name="Bodoni MT Black" size="12.0" />
+            <Font name="Corbel" size="12.0" />
          </font></Button>
-      <Pane layoutX="129.0" layoutY="487.0" prefHeight="26.0" prefWidth="201.0">
+      <Pane layoutX="129.0" layoutY="593.0" prefHeight="26.0" prefWidth="201.0" AnchorPane.bottomAnchor="14.600000000000001" AnchorPane.leftAnchor="129.0" AnchorPane.rightAnchor="407.4" AnchorPane.topAnchor="593.0">
          <children>
-            <Label layoutX="-1.0" layoutY="4.0" text="cell visited:">
+            <Label fx:id="cellCount" layoutX="107.0" layoutY="1.0" prefHeight="18.0" prefWidth="62.0" textFill="#8fc1ea">
                <font>
                   <Font name="Bodoni MT" size="15.0" />
                </font>
             </Label>
-            <Label fx:id="cellCount" layoutX="97.0" layoutY="7.0" prefHeight="18.0" prefWidth="71.0">
+            <Label layoutX="16.0" layoutY="4.0" text="cell visited:" textFill="#c75218">
                <font>
                   <Font name="Bodoni MT" size="15.0" />
                </font>
             </Label>
          </children>
       </Pane>
-      <Label layoutX="6.0" layoutY="244.0" text="Animation speed" textFill="#d4a010">
+      <Label layoutX="7.0" layoutY="245.0" text="Animation speed" textFill="#d4a010">
          <font>
-            <Font size="14.0" />
+            <Font name="Corbel" size="14.0" />
          </font></Label>
-      <TextField fx:id="aniSpeed" layoutX="6.0" layoutY="272.0" onKeyReleased="#setAniSpeed" prefHeight="26.0" prefWidth="90.0" promptText="50" />
-      <Button layoutX="3.0" layoutY="335.0" mnemonicParsing="false" onAction="#createWall" text="create obsticles" />
+      <TextField fx:id="aniSpeed" layoutX="15.0" layoutY="280.0" onKeyReleased="#setAniSpeed" prefHeight="26.0" prefWidth="71.0" promptText="50" />
+      <Button layoutX="20.0" layoutY="325.0" mnemonicParsing="false" onAction="#createWall" text="obsticles" />
       <Button layoutX="23.0" layoutY="372.0" mnemonicParsing="false" onAction="#initialize" text="Refresh" />
    </children>
 </AnchorPane>
