@@ -159,7 +159,7 @@ public class MainController {
                             }
                             size = 0;
                             count = 0 ;
-                            destin.setStyle("-fx-background-color: "+destiCol);                                            //#FF8000
+                            destin.setStyle("-fx-background-color: "+background);                                            //#FF8000
                             if(source != null)
                             {
                                 source.setStyle("-fx-background-color: "+sourceCol);
