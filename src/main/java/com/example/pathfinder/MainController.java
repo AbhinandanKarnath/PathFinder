@@ -336,6 +336,24 @@ public class MainController {
     }
 
     @FXML
+    public void newOne()
+    {
+        if(p1 == null || p2 == null)
+        {
+            return;
+        }
+        Task<Void> fin = new Task<Void>() {
+            @Override
+            public Void call()throws Exception
+            {
+
+                return null;
+            }
+        };
+    }
+
+
+    @FXML
     public void createWall()
     {
         Random random = new Random();
@@ -381,4 +399,5 @@ public class MainController {
             }
         }
     }
+
 }

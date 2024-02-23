@@ -40,5 +40,6 @@
          </font></TextField>
       <Button layoutX="20.0" layoutY="325.0" mnemonicParsing="false" onAction="#createWall" text="obsticles" />
       <Button layoutX="23.0" layoutY="372.0" mnemonicParsing="false" onAction="#initialize" text="Refresh" />
+      <Button layoutX="15.0" layoutY="435.0" mnemonicParsing="false" onAction="#newOne" prefHeight="26.0" prefWidth="71.0" text="new one" />
    </children>
 </AnchorPane>
